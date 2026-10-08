@@ -12,6 +12,7 @@ import (
 	"github.com/saleem-megflow/pgdoctor/internal/lead"
 	"github.com/saleem-megflow/pgdoctor/internal/render"
 	"github.com/saleem-megflow/pgdoctor/internal/report"
+	"github.com/saleem-megflow/pgdoctor/internal/webreport"
 	"github.com/spf13/cobra"
 )
 
@@ -43,7 +44,8 @@ func runAudit(ctx context.Context, dsn string) error {
 		return fmt.Errorf("--dsn is required, e.g. postgres://readonly_user:pass@host:5432/dbname")
 	}
 
-	if _, _, err := lead.Capture(bufio.NewReader(os.Stdin), os.Stdout); err != nil {
+	email, company, err := lead.Capture(bufio.NewReader(os.Stdin), os.Stdout)
+	if err != nil {
 		return fmt.Errorf("email capture: %w", err)
 	}
 
@@ -70,5 +72,9 @@ func runAudit(ctx context.Context, dsn string) error {
 	r := &report.Report{PostgresVersion: version, Findings: findings}
 
 	render.Report(os.Stdout, r)
+
+	if url, err := webreport.Submit(email, company, r); err == nil {
+		fmt.Printf("\nView this report online: %s\n", url)
+	}
 	return nil
 }
