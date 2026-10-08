@@ -101,11 +101,18 @@ type Report struct {
 	Findings        []Finding
 }
 
-// Score computes the overall 0-100 reliability score. Each non-healthy
-// finding deducts points by severity; floor at 0.
+// Score computes the overall 0-100 reliability score.
 func (r *Report) Score() int {
+	return ScoreFindings(r.Findings)
+}
+
+// ScoreFindings computes a 0-100 score by deducting points per non-healthy
+// finding, weighted by severity. Shared between the overall report score
+// and any category that reports its own sub-score (e.g. "Vacuum Health:
+// 61/100").
+func ScoreFindings(findings []Finding) int {
 	score := 100
-	for _, f := range r.Findings {
+	for _, f := range findings {
 		switch f.Severity {
 		case Critical:
 			score -= 8

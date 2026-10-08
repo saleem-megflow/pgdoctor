@@ -136,6 +136,9 @@ func categorySections(w io.Writer, r *report.Report) {
 		fmt.Fprintln(w)
 		fmt.Fprintln(w, "────────────────────────────────────────────")
 		fmt.Fprintln(w, categoryOrder[i].Title)
+		if g.Category == report.VacuumBloat && len(g.Findings) > 0 {
+			fmt.Fprintf(w, "  Vacuum Health: %d/100\n", report.ScoreFindings(g.Findings))
+		}
 		if len(g.Findings) == 0 {
 			fmt.Fprintln(w, "  (not yet checked in this build)")
 			continue

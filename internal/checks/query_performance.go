@@ -13,9 +13,13 @@ import (
 // excludeSelfClause filters out pgdoctor's own introspection queries (and
 // other monitoring tools querying the same catalogs) from pg_stat_statements
 // results, so the audit never diagnoses itself instead of the customer's
-// actual workload.
+// actual workload. It also scopes to the current database only —
+// pg_stat_statements is cluster-wide by default, so without this a query
+// run against an unrelated database on the same instance would otherwise
+// leak into this database's report.
 const excludeSelfClause = `
-	query NOT ILIKE '%pg_stat_statements%'
+	dbid = (SELECT oid FROM pg_database WHERE datname = current_database())
+	AND query NOT ILIKE '%pg_stat_statements%'
 	AND query NOT ILIKE '%pg_stat_activity%'
 	AND query NOT ILIKE '%pg_stat_user_tables%'
 	AND query NOT ILIKE '%pg_extension%'

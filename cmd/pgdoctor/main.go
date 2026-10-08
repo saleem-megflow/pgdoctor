@@ -63,15 +63,11 @@ func runAudit(ctx context.Context, dsn string) error {
 	}
 
 	fmt.Println("Running checks...")
-	r := &report.Report{PostgresVersion: version}
-	for _, check := range checks.All {
-		findings, err := check(ctx, pool)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "(warning: a check failed: %v)\n", err)
-			continue
-		}
-		r.Findings = append(r.Findings, findings...)
+	findings, checkErrs := checks.Run(ctx, pool)
+	for _, checkErr := range checkErrs {
+		fmt.Fprintf(os.Stderr, "(warning: a check failed: %v)\n", checkErr)
 	}
+	r := &report.Report{PostgresVersion: version, Findings: findings}
 
 	render.Report(os.Stdout, r)
 	return nil
