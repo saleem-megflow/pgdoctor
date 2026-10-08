@@ -16,9 +16,37 @@ const cardWidth = 43
 // Report renders the full report to w.
 func Report(w io.Writer, r *report.Report) {
 	header(w, r)
+	executiveSummary(w, r)
 	topRisks(w, r)
 	categorySections(w, r)
 	actionPlan(w, r)
+}
+
+// executiveSummary is report section 1: a short plain-English synthesis,
+// generated from the same Finding data as every other section rather than
+// hand-written per run.
+func executiveSummary(w io.Writer, r *report.Report) {
+	fmt.Fprintln(w)
+	fmt.Fprintln(w, "1. Executive Summary")
+
+	counts := r.SeverityCounts()
+	critical, high := counts[report.Critical], counts[report.High]
+	score, risk := r.Score(), r.RiskBand()
+
+	var headline string
+	switch {
+	case critical > 0:
+		headline = fmt.Sprintf("This database scored %d/100 (%s risk) with %d critical issue(s) that need attention now.", score, risk, critical)
+	case high > 0:
+		headline = fmt.Sprintf("This database scored %d/100 (%s risk) with %d high-severity issue(s) worth addressing this week.", score, risk, high)
+	default:
+		headline = fmt.Sprintf("This database scored %d/100 (%s risk) — no critical or high-severity issues were found.", score, risk)
+	}
+	fmt.Fprintln(w, headline)
+
+	if top := r.TopRisks(1); len(top) > 0 {
+		fmt.Fprintf(w, "The most significant finding: %s\n", top[0].Headline)
+	}
 }
 
 func header(w io.Writer, r *report.Report) {
