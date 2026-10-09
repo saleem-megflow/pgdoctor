@@ -9,7 +9,7 @@ import (
 )
 
 // Connect opens a pool against dsn and forces every pooled connection into
-// a read-only transaction mode, so pgdoctor can never write to the
+// a read-only transaction mode, so titanpostgres can never write to the
 // customer's database even if a check has a bug. AfterConnect runs on each
 // new physical connection the pool creates, not just the first.
 func Connect(ctx context.Context, dsn string) (*pgxpool.Pool, error) {

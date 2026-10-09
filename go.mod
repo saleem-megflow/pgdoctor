@@ -1,4 +1,4 @@
-module github.com/saleem-megflow/pgdoctor
+module github.com/saleem-megflow/titanpostgres
 
 go 1.26.4
 

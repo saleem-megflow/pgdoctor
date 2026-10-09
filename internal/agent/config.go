@@ -1,7 +1,7 @@
-// Package agent implements "pgdoctor agent" — the V2 continuous-collection
-// daemon. Unlike the one-shot "pgdoctor audit" CLI, the agent runs
+// Package agent implements "titanpostgres agent" — the V2 continuous-collection
+// daemon. Unlike the one-shot "titanpostgres audit" CLI, the agent runs
 // unattended, reusing the exact same checks.Run pipeline on a timer and
-// reporting results to pgdoctor-api's ingestion endpoint instead of
+// reporting results to titanpostgres-api's ingestion endpoint instead of
 // printing a terminal report.
 package agent
 
@@ -22,7 +22,7 @@ func configPath() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(home, ".pgdoctor", "agent.json"), nil
+	return filepath.Join(home, ".titanpostgres", "agent.json"), nil
 }
 
 func Save(cfg Config) error {

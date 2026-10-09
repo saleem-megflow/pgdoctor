@@ -5,14 +5,14 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/saleem-megflow/pgdoctor/internal/report"
+	"github.com/saleem-megflow/titanpostgres/internal/report"
 )
 
 // StorageGrowth reports current database size and largest tables. It
 // deliberately does NOT report a growth rate or a days-until-threshold
 // projection — a single audit run has no historical snapshot to derive a
 // trend from, and fabricating one would violate the project's core
-// accuracy rule. That projection becomes possible once pgdoctor has run
+// accuracy rule. That projection becomes possible once titanpostgres has run
 // more than once against the same database (V2, continuous audit).
 func StorageGrowth(ctx context.Context, pool *pgxpool.Pool) ([]report.Finding, error) {
 	var dbSize int64

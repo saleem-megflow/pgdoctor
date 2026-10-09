@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/saleem-megflow/pgdoctor/internal/report"
+	"github.com/saleem-megflow/titanpostgres/internal/report"
 )
 
 // LocksTransactions checks for long-running transactions, idle-in-

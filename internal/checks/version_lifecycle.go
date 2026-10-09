@@ -6,13 +6,13 @@ import (
 	"strconv"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/saleem-megflow/pgdoctor/internal/report"
+	"github.com/saleem-megflow/titanpostgres/internal/report"
 )
 
 // VersionLifecycle is a minor baseline check, deliberately not a
 // centerpiece of the report. It flags clearly old major versions as a
 // maintenance consideration rather than trying to track exact EOL dates
-// (which would need an external, regularly-updated data source pgdoctor
+// (which would need an external, regularly-updated data source titanpostgres
 // doesn't have in V1).
 func VersionLifecycle(ctx context.Context, pool *pgxpool.Pool) ([]report.Finding, error) {
 	var version string

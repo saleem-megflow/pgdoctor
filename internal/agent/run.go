@@ -8,12 +8,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/saleem-megflow/pgdoctor/internal/checks"
-	"github.com/saleem-megflow/pgdoctor/internal/db"
-	"github.com/saleem-megflow/pgdoctor/internal/report"
+	"github.com/saleem-megflow/titanpostgres/internal/checks"
+	"github.com/saleem-megflow/titanpostgres/internal/db"
+	"github.com/saleem-megflow/titanpostgres/internal/report"
 )
 
-const defaultEndpoint = "https://pgdoctor-api.megflow.com/v2/ingest"
+const defaultEndpoint = "https://api.titanpostgres.megflow.com/v2/ingest"
 
 type ingestFinding struct {
 	Category string   `json:"category"`
@@ -32,7 +32,7 @@ type ingestPayload struct {
 
 // RunOnce executes one collection cycle: connect read-only, run the same
 // checks.Run pipeline the one-shot CLI uses, and POST the result to
-// pgdoctor-api. Local aggregation (fingerprint+stats, never raw query
+// titanpostgres-api. Local aggregation (fingerprint+stats, never raw query
 // text/rows) already happens inside the checks themselves — this layer
 // doesn't add or remove anything from what crosses the network.
 func RunOnce(ctx context.Context, cfg Config) error {

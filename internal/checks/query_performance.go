@@ -7,10 +7,10 @@ import (
 	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/saleem-megflow/pgdoctor/internal/report"
+	"github.com/saleem-megflow/titanpostgres/internal/report"
 )
 
-// excludeSelfClause filters out pgdoctor's own introspection queries (and
+// excludeSelfClause filters out titanpostgres's own introspection queries (and
 // other monitoring tools querying the same catalogs) from pg_stat_statements
 // results, so the audit never diagnoses itself instead of the customer's
 // actual workload. It also scopes to the current database only —
@@ -43,7 +43,7 @@ func QueryPerformance(ctx context.Context, pool *pgxpool.Pool) ([]report.Finding
 			Urgency:  report.FixThisWeek,
 			Headline: "pg_stat_statements is not installed, so query-level performance can't be measured.",
 			Action:   "Enable the pg_stat_statements extension",
-			Detail:   "Without pg_stat_statements, pgdoctor cannot identify which queries dominate database execution time. This is the single highest-leverage extension for diagnosing performance.",
+			Detail:   "Without pg_stat_statements, titanpostgres cannot identify which queries dominate database execution time. This is the single highest-leverage extension for diagnosing performance.",
 		}}, nil
 	}
 

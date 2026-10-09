@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/saleem-megflow/pgdoctor/internal/report"
+	"github.com/saleem-megflow/titanpostgres/internal/report"
 )
 
 // Configuration checks only the parameters that can actually cause

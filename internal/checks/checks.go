@@ -1,4 +1,4 @@
-// Package checks implements pgdoctor's individual diagnostic checks. Every
+// Package checks implements titanpostgres's individual diagnostic checks. Every
 // check is a Checker: given a connection pool, it returns the Findings it
 // produced (including Healthy ones, so the report's "healthy checks" count
 // is honest rather than inferred).
@@ -8,7 +8,7 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/saleem-megflow/pgdoctor/internal/report"
+	"github.com/saleem-megflow/titanpostgres/internal/report"
 )
 
 type Checker func(ctx context.Context, pool *pgxpool.Pool) ([]report.Finding, error)

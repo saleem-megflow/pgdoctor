@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/saleem-megflow/pgdoctor/internal/report"
+	"github.com/saleem-megflow/titanpostgres/internal/report"
 )
 
 // IndexHealth checks for missing-index candidates (tables scanned
@@ -83,7 +83,7 @@ func missingIndexCandidates(ctx context.Context, pool *pgxpool.Pool) ([]report.F
 				{Value: fmt.Sprintf("Table size: %s", formatBytes(sizeBytes))},
 			},
 			Action: "Review query patterns against this table for a missing index",
-			Detail: "Potential benefit: HIGH. pgdoctor can't identify the exact column(s) without analyzing query plans — review WHERE/JOIN clauses against this table.",
+			Detail: "Potential benefit: HIGH. titanpostgres can't identify the exact column(s) without analyzing query plans — review WHERE/JOIN clauses against this table.",
 		})
 	}
 	return findings, rows.Err()

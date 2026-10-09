@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/saleem-megflow/pgdoctor/internal/report"
+	"github.com/saleem-megflow/titanpostgres/internal/report"
 )
 
 // VacuumBloat checks dead-tuple accumulation and vacuum/analyze staleness
@@ -76,7 +76,7 @@ func VacuumBloat(ctx context.Context, pool *pgxpool.Pool) ([]report.Finding, err
 			Headline: fmt.Sprintf("%s has significant dead-tuple accumulation.", table),
 			Metrics:  metrics,
 			Action:   "Review autovacuum configuration for this table",
-			Detail:   "Risk: performance degradation / table growth. pgdoctor reports dead-tuple percentage and vacuum age only — not an exact bloat estimate, which PostgreSQL's own stats can't reliably provide.",
+			Detail:   "Risk: performance degradation / table growth. titanpostgres reports dead-tuple percentage and vacuum age only — not an exact bloat estimate, which PostgreSQL's own stats can't reliably provide.",
 		})
 	}
 	if err := rows.Err(); err != nil {

@@ -6,12 +6,12 @@ import (
 	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/saleem-megflow/pgdoctor/internal/report"
+	"github.com/saleem-megflow/titanpostgres/internal/report"
 )
 
 // SecurityBaseline is a sanity pass, not a security scanner — per the
 // project spec, a full security product is explicitly a separate future
-// direction. Checks: SSL, whether pgdoctor's own connecting role is
+// direction. Checks: SSL, whether titanpostgres's own connecting role is
 // superuser (it shouldn't need to be), privileged roles present, and
 // overly permissive pg_hba rules (trust auth, unrestricted source
 // addresses).
@@ -86,7 +86,7 @@ func connectingRoleCheck(ctx context.Context, pool *pgxpool.Pool) (report.Findin
 		return report.Finding{
 			Category: report.SecurityBaseline,
 			Severity: report.Healthy,
-			Headline: "pgdoctor is connected with a non-superuser role, as recommended.",
+			Headline: "titanpostgres is connected with a non-superuser role, as recommended.",
 			Action:   "No action needed",
 		}, nil
 	}
@@ -94,8 +94,8 @@ func connectingRoleCheck(ctx context.Context, pool *pgxpool.Pool) (report.Findin
 		Category: report.SecurityBaseline,
 		Severity: report.Medium,
 		Urgency:  report.OptimizeLater,
-		Headline: "pgdoctor is connected with a superuser role.",
-		Action:   "Create a dedicated read-only role for pgdoctor instead of using a superuser credential",
+		Headline: "titanpostgres is connected with a superuser role.",
+		Action:   "Create a dedicated read-only role for titanpostgres instead of using a superuser credential",
 		Detail:   "A reliability audit only needs SELECT access and pg_monitor — using superuser credentials for this is broader access than necessary.",
 	}, nil
 }
@@ -140,7 +140,7 @@ func privilegedRoles(ctx context.Context, pool *pgxpool.Pool) (report.Finding, e
 		Headline: fmt.Sprintf("%d role(s) hold superuser, CREATEROLE, or CREATEDB privileges.", len(names)),
 		Metrics:  []report.Metric{{Value: strings.Join(names, ", ")}},
 		Action:   "Review whether each of these roles still needs this level of privilege",
-		Detail:   "pgdoctor can't determine whether these roles are actively used — only that they currently hold elevated privileges.",
+		Detail:   "titanpostgres can't determine whether these roles are actively used — only that they currently hold elevated privileges.",
 	}, nil
 }
 

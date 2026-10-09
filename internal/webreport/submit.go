@@ -1,4 +1,4 @@
-// Package webreport submits a completed audit to pgdoctor-api so it can
+// Package webreport submits a completed audit to titanpostgres-api so it can
 // be viewed as a page, not just read from the terminal. If this fails
 // (offline, firewall), the CLI still prints its terminal report — a web
 // view is a bonus, never a requirement for the audit to be useful.
@@ -13,10 +13,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/saleem-megflow/pgdoctor/internal/report"
+	"github.com/saleem-megflow/titanpostgres/internal/report"
 )
 
-const defaultEndpoint = "https://pgdoctor-api.megflow.com/reports"
+const defaultEndpoint = "https://api.titanpostgres.megflow.com/reports"
 
 type finding struct {
 	Category string   `json:"category"`
@@ -36,7 +36,7 @@ type submission struct {
 	Findings        []finding `json:"findings"`
 }
 
-// Submit posts r to pgdoctor-api and returns the shareable URL.
+// Submit posts r to titanpostgres-api and returns the shareable URL.
 func Submit(email, company string, r *report.Report) (string, error) {
 	sub := submission{
 		Email:           email,
@@ -65,7 +65,7 @@ func Submit(email, company string, r *report.Report) (string, error) {
 		return "", err
 	}
 
-	endpoint := os.Getenv("PGDOCTOR_REPORTS_ENDPOINT")
+	endpoint := os.Getenv("TITANPOSTGRES_REPORTS_ENDPOINT")
 	if endpoint == "" {
 		endpoint = defaultEndpoint
 	}

@@ -1,4 +1,4 @@
-// Package render implements pgdoctor's terminal output: the score header,
+// Package render implements titanpostgres's terminal output: the score header,
 // the Top-5 wow cards, the per-category sections, and the urgency-grouped
 // action plan. V1 is terminal-only — no HTML/PDF.
 package render
@@ -8,7 +8,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/saleem-megflow/pgdoctor/internal/report"
+	"github.com/saleem-megflow/titanpostgres/internal/report"
 )
 
 const cardWidth = 43
@@ -110,7 +110,7 @@ func writeCardLine(w io.Writer, text string) {
 }
 
 // displayWidth approximates terminal column width: most emoji used in
-// pgdoctor's output (🔴🟠🟡🟢) render as double-width, everything else in
+// titanpostgres's output (🔴🟠🟡🟢) render as double-width, everything else in
 // this tool's output is single-width ASCII.
 func displayWidth(s string) int {
 	width := 0

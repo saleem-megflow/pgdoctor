@@ -1,5 +1,5 @@
 #!/bin/bash
-# Cross-compiles pgdoctor for all supported platforms and publishes a
+# Cross-compiles titanpostgres for all supported platforms and publishes a
 # GitHub release with the resulting tarballs. Usage: scripts/release.sh v0.1.0
 set -euo pipefail
 
@@ -19,17 +19,17 @@ targets=(
 
 for target in "${targets[@]}"; do
   read -r goos goarch <<<"$target"
-  name="pgdoctor-${goos}-${goarch}"
+  name="titanpostgres-${goos}-${goarch}"
   echo "Building ${name}..."
-  GOOS="$goos" GOARCH="$goarch" go build -o "${OUT}/${name}/pgdoctor" ./cmd/pgdoctor
-  tar -C "${OUT}/${name}" -czf "${OUT}/${name}.tar.gz" pgdoctor
+  GOOS="$goos" GOARCH="$goarch" go build -o "${OUT}/${name}/titanpostgres" ./cmd/titanpostgres
+  tar -C "${OUT}/${name}" -czf "${OUT}/${name}.tar.gz" titanpostgres
   rm -rf "${OUT}/${name}"
 done
 
 git tag "$VERSION"
 git push origin "$VERSION"
 gh release create "$VERSION" "${OUT}"/*.tar.gz \
-  --title "pgdoctor ${VERSION}" \
-  --notes "PostgreSQL Reliability Audit CLI. Install: curl -fsSL https://pgdoctor-api.megflow.com/install.sh | sh"
+  --title "titanpostgres ${VERSION}" \
+  --notes "PostgreSQL Reliability Audit CLI. Install: curl -fsSL https://api.titanpostgres.megflow.com/install.sh | sh"
 
 echo "Released ${VERSION}."

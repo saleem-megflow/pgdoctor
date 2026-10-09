@@ -1,6 +1,6 @@
 // Package lead implements the email-gate lead capture shown once before a
-// pgdoctor audit runs. The lead is POSTed to pgdoctor-api (a tiny Megflow-
-// owned endpoint — see ~/code/pgdoctor-api) so it actually reaches Megflow,
+// titanpostgres audit runs. The lead is POSTed to titanpostgres-api (a tiny Megflow-
+// owned endpoint — see ~/code/titanpostgres-api) so it actually reaches Megflow,
 // not just the customer's own machine. If the API call fails (offline,
 // firewall, etc.) the audit still proceeds — a lead-capture outage should
 // never block the thing the customer actually asked for.
@@ -19,14 +19,14 @@ import (
 	"time"
 )
 
-const defaultEndpoint = "https://pgdoctor-api.megflow.com/leads"
+const defaultEndpoint = "https://api.titanpostgres.megflow.com/leads"
 
 var emailPattern = regexp.MustCompile(`^[^\s@]+@[^\s@]+\.[^\s@]+$`)
 
 // Capture prompts for email and company on stdin/stdout, validates the
-// email loosely, reports it to pgdoctor-api, and returns it.
+// email loosely, reports it to titanpostgres-api, and returns it.
 func Capture(in *bufio.Reader, out *os.File) (email, company string, err error) {
-	fmt.Fprintln(out, "pgdoctor needs an email before running your audit — we'll only use it to follow up about your results.")
+	fmt.Fprintln(out, "titanpostgres needs an email before running your audit — we'll only use it to follow up about your results.")
 	for {
 		fmt.Fprint(out, "Email: ")
 		line, readErr := in.ReadString('\n')
@@ -53,7 +53,7 @@ func Capture(in *bufio.Reader, out *os.File) (email, company string, err error) 
 }
 
 func report(email, company string) error {
-	endpoint := os.Getenv("PGDOCTOR_LEADS_ENDPOINT")
+	endpoint := os.Getenv("TITANPOSTGRES_LEADS_ENDPOINT")
 	if endpoint == "" {
 		endpoint = defaultEndpoint
 	}

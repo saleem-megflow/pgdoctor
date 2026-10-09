@@ -7,19 +7,19 @@ import (
 	"os"
 	"time"
 
-	"github.com/saleem-megflow/pgdoctor/internal/agent"
-	"github.com/saleem-megflow/pgdoctor/internal/checks"
-	"github.com/saleem-megflow/pgdoctor/internal/db"
-	"github.com/saleem-megflow/pgdoctor/internal/lead"
-	"github.com/saleem-megflow/pgdoctor/internal/render"
-	"github.com/saleem-megflow/pgdoctor/internal/report"
-	"github.com/saleem-megflow/pgdoctor/internal/webreport"
+	"github.com/saleem-megflow/titanpostgres/internal/agent"
+	"github.com/saleem-megflow/titanpostgres/internal/checks"
+	"github.com/saleem-megflow/titanpostgres/internal/db"
+	"github.com/saleem-megflow/titanpostgres/internal/lead"
+	"github.com/saleem-megflow/titanpostgres/internal/render"
+	"github.com/saleem-megflow/titanpostgres/internal/report"
+	"github.com/saleem-megflow/titanpostgres/internal/webreport"
 	"github.com/spf13/cobra"
 )
 
 func main() {
 	root := &cobra.Command{
-		Use:   "pgdoctor",
+		Use:   "titanpostgres",
 		Short: "PostgreSQL Reliability Audit",
 	}
 
@@ -81,8 +81,8 @@ func runAudit(ctx context.Context, dsn string) error {
 	return nil
 }
 
-// agentCmd wires "pgdoctor agent install" and "pgdoctor agent run" — V2's
-// continuous collection, separate from the one-shot "pgdoctor audit"
+// agentCmd wires "titanpostgres agent install" and "titanpostgres agent run" — V2's
+// continuous collection, separate from the one-shot "titanpostgres audit"
 // above. Reuses the exact same checks.Run pipeline, per the explicit
 // decision to build V2 on top of V1's audit engine rather than rewrite it.
 func agentCmd() *cobra.Command {
@@ -97,18 +97,18 @@ func agentCmd() *cobra.Command {
 		Short: "Save agent configuration (DSN + API key)",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if installDSN == "" || apiKey == "" {
-				return fmt.Errorf("--dsn and --api-key are required (get an API key by registering a database at the pgdoctor dashboard)")
+				return fmt.Errorf("--dsn and --api-key are required (get an API key by registering a database at the titanpostgres dashboard)")
 			}
 			if err := agent.Save(agent.Config{DSN: installDSN, APIKey: apiKey, Endpoint: endpoint}); err != nil {
 				return fmt.Errorf("save config: %w", err)
 			}
-			fmt.Println("Agent configured. Run `pgdoctor agent run` to start continuous collection.")
+			fmt.Println("Agent configured. Run `titanpostgres agent run` to start continuous collection.")
 			return nil
 		},
 	}
 	install.Flags().StringVar(&installDSN, "dsn", "", "PostgreSQL connection string (read-only credentials recommended)")
-	install.Flags().StringVar(&apiKey, "api-key", "", "API key for this database (from the pgdoctor dashboard)")
-	install.Flags().StringVar(&endpoint, "endpoint", "", "Override the ingestion endpoint (defaults to pgdoctor-api.megflow.com)")
+	install.Flags().StringVar(&apiKey, "api-key", "", "API key for this database (from the titanpostgres dashboard)")
+	install.Flags().StringVar(&endpoint, "endpoint", "", "Override the ingestion endpoint (defaults to api.titanpostgres.megflow.com)")
 
 	var interval time.Duration
 	run := &cobra.Command{
@@ -117,7 +117,7 @@ func agentCmd() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfg, err := agent.Load()
 			if err != nil {
-				return fmt.Errorf("no agent configuration found, run `pgdoctor agent install` first: %w", err)
+				return fmt.Errorf("no agent configuration found, run `titanpostgres agent install` first: %w", err)
 			}
 			fmt.Printf("Starting continuous collection every %s...\n", interval)
 			agent.RunLoop(cmd.Context(), cfg, interval)
